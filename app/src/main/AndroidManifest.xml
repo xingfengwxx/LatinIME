@@ -184,7 +184,7 @@
         <provider android:name="com.android.inputmethod.dictionarypack.DictionaryProvider"
                 android:grantUriPermissions="true"
                 android:exported="false"
-                android:authorities="@string/authority"
+                android:authorities="${applicationId}.contentprovider"
                 android:multiprocess="false"
                 android:label="@string/dictionary_provider_name">
         </provider>

@@ -3,18 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "me.brainbear.latinime"
+        applicationId "com.ashd.latinime"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
     }
 
     sourceSets {
@@ -22,6 +16,48 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+    signingConfigs {
+        releaseSign {
+            keyAlias 'aishang.keystore'
+            keyPassword 'rswzjq!@#$'
+            storeFile file('../keystore/javoda.jks')
+            storePassword 'rswzjq!@#$'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseSign
+        }
+        debug {
+            signingConfig signingConfigs.releaseSign
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "LatinIME_7.0_c${defaultConfig.versionCode}_v${defaultConfig.versionName}_${buildType.name}_${releaseTime()}.apk"
+        }
+    }
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd-HHmmss", TimeZone.getDefault())
 }
 
 dependencies {
